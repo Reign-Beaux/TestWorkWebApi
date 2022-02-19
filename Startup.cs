@@ -19,7 +19,10 @@ namespace BackendTestWork
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddCors();
+            services.AddCors(options =>
+                options.AddPolicy("AllowWebApp", builder => builder.AllowAnyOrigin()
+                                                                   .AllowAnyHeader()
+                                                                   .AllowAnyMethod()));
 
             services.AddControllers();
 
@@ -37,14 +40,11 @@ namespace BackendTestWork
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend Test Work v1"));
             }
 
+            app.UseCors("AllowWebApp");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true));
 
             app.UseAuthentication();
 

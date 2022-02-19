@@ -3292,6 +3292,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 11.0.0",
+      "Microsoft.EntityFrameworkCore >= 7.0.0-preview.1.22076.6",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.0-preview.1.22076.6",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.0-preview.1.22076.6",
       "Swashbuckle.AspNetCore >= 6.2.3"
@@ -3344,6 +3345,10 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": {
             "target": "Package",
             "version": "[11.0.0, )"
+          },
+          "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[7.0.0-preview.1.22076.6, )"
           },
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
