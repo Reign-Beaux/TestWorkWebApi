@@ -3,7 +3,7 @@ using BackendTestWork.DTOs;
 using BackendTestWork.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using BackendTestWork.Helpers;
 
 namespace BackendTestWork.Controllers
 {
@@ -13,29 +13,27 @@ namespace BackendTestWork.Controllers
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
+        private readonly StoreProcedures sp;
 
         public PersonsController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
+            this.sp = new StoreProcedures();
         }
 
         [HttpGet]
         public async Task<ActionResult<List<PersonDTO>>> Get()
-        {
-            var entities = await context.Persons.ToListAsync();
-            var dtos = mapper.Map<List<PersonDTO>>(entities);
-            return dtos;
-        }
+            => await sp.GetPersons("PersonsAll");
 
         [HttpGet("{id:int}", Name = "getPerson")]
-        public async Task<ActionResult<PersonDTO>> Get(int id)
+        public async Task<ActionResult<Person>> Get(int id)
         {
             var entity = await context.Persons.FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 return NotFound();
 
-            var dto = mapper.Map<PersonDTO>(entity);
+            var dto = mapper.Map<Person>(entity);
             return dto;
         }
 
@@ -73,12 +71,24 @@ namespace BackendTestWork.Controllers
             return NoContent();
         }
 
-        //[HttpGet("{nombre}")]
-        //public async Task<ActionResult> Get(string nombre)
+        [HttpGet("factorial")]
+        public ActionResult Factorial([FromQuery] int baseFactorial)
+        {
+            //var result = RunFactorial(baseFactorial);
+            return Ok(new 
+            {
+                results = 15
+            });
+        }
+
+        //public int RunFactorial(int n)
         //{
-        //    var person = context.Persons.Where(p => p.Nombre == nombre)
-        //                                .Select(x => new { x.Nombre, x.FechaNacimiento })
-        //                                .FirstOrDefault();
+        //    if (n == 0)
+        //        n = 1;
+        //    else
+        //        n *= RunFactorial(n - 1);
+
+        //    return n;
         //}
     }
 }
