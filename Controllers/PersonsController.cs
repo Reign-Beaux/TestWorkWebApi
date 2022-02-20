@@ -24,17 +24,16 @@ namespace BackendTestWork.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<PersonDTO>>> Get()
-            => await sp.GetPersons("PersonsAll");
+            => await sp.GetPersons();
 
         [HttpGet("{id:int}", Name = "getPerson")]
-        public async Task<ActionResult<Person>> Get(int id)
+        public async Task<ActionResult<PersonDTO>> Get(int id)
         {
-            var entity = await context.Persons.FirstOrDefaultAsync(x => x.Id == id);
-            if (entity == null)
+            var entity = await sp.FindPerson(id);
+            if (entity.Value.Id == 0)
                 return NotFound();
 
-            var dto = mapper.Map<Person>(entity);
-            return dto;
+            return entity;
         }
 
         [HttpPost]
@@ -74,21 +73,21 @@ namespace BackendTestWork.Controllers
         [HttpGet("factorial")]
         public ActionResult Factorial([FromQuery] int baseFactorial)
         {
-            //var result = RunFactorial(baseFactorial);
+            Exercises exercise = new Exercises();
             return Ok(new 
             {
-                results = 15
+                result = exercise.RunFactorial(baseFactorial)
             });
         }
 
-        //public int RunFactorial(int n)
-        //{
-        //    if (n == 0)
-        //        n = 1;
-        //    else
-        //        n *= RunFactorial(n - 1);
-
-        //    return n;
-        //}
+        [HttpGet("potencia")]
+        public ActionResult Potencia([FromQuery] int x, int y)
+        {
+            Exercises exercise = new Exercises();
+            return Ok(new
+            {
+                result = exercise.RunPotencia(x, y)
+            });
+        }
     }
 }
