@@ -10,5 +10,6 @@ namespace BackendTestWork
         }
 
         public DbSet<Person> Persons { get; set; }
+        public DbSet<HistoricPerson> HistoricPersons { get; set; }
     }
 }
