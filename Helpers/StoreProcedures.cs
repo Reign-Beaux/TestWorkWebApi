@@ -64,5 +64,56 @@ namespace BackendTestWork.Helpers
             }
             return person;
         }
+        public void CreatePerson(PersonDTO person)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand($"PersonsCreate {person.Nombre}, {person.Edad}, '{person.FechaNacimiento.ToString("yyyy-MM-dd")}'", connection);
+                try
+                {
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error: " + ex.Message);
+                }
+            }
+        }
+        public void UpdatePerson(int Id, PersonDTO person)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand($"PersonsUpdate {Id}, {person.Nombre}, {person.Edad}, '{person.FechaNacimiento.ToString("yyyy-MM-dd")}'", connection);
+                try
+                {
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error: " + ex.Message);
+                }
+            }
+        }
+        public void DeletePerson(int Id)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand($"PersonsDelete {Id}", connection);
+                try
+                {
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error: " + ex.Message);
+                }
+            }
+        }
     }
 }

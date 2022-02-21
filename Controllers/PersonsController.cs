@@ -37,38 +37,16 @@ namespace BackendTestWork.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CreatePersonDTO createPersonDTO)
-        {
-            var entity = mapper.Map<Person>(createPersonDTO);
-            context.Add(entity);
-            await context.SaveChangesAsync();
-            var personDTO = mapper.Map<PersonDTO>(entity);
-
-            return new CreatedAtRouteResult("getPerson", new { id = personDTO.Id }, personDTO);
-        }
+        public void Post([FromBody] PersonDTO createPerson)
+            => sp.CreatePerson(createPerson);
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] CreatePersonDTO createPersonDTO)
-        {
-            var entity = mapper.Map<Person>(createPersonDTO);
-            entity.Id = id;
-            context.Entry(entity).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-            return NoContent();
-        }
+        public void Put(int id, [FromBody] PersonDTO createPersonDTO)
+            => sp.UpdatePerson(id, createPersonDTO);
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var present = await context.Persons.AnyAsync(x => x.Id == id);
-            if (!present)
-                return NotFound();
-
-            context.Remove(new Person() { Id = id });
-            await context.SaveChangesAsync();
-
-            return NoContent();
-        }
+        public void Delete(int id)
+            => sp.DeletePerson(id);
 
         [HttpGet("factorial")]
         public ActionResult Factorial([FromQuery] int baseFactorial)
