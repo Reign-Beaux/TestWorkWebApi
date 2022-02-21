@@ -115,5 +115,33 @@ namespace BackendTestWork.Helpers
                 }
             }
         }
+        public async Task<List<PersonDTO>> SearchNombrePerson(string Nombre)
+        {
+            List<PersonDTO> person = new List<PersonDTO>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand($"PersonsSearchName '%{Nombre}%'", connection);
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
+                    while (reader.Read())
+                    {
+                        PersonDTO oPerson = new PersonDTO();
+                        oPerson.Id = reader.GetInt32(0);
+                        oPerson.Nombre = reader.GetString(1);
+                        oPerson.Edad = reader.GetInt32(2);
+                        oPerson.FechaNacimiento = reader.GetDateTime(3);
+                        person.Add(oPerson);
+                    }
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error: " + ex.Message);
+                }
+            }
+            return person;
+        }
     }
 }

@@ -67,5 +67,9 @@ namespace BackendTestWork.Controllers
                 result = exercise.RunPotencia(x, y)
             });
         }
+
+        [HttpGet("filtroNombre")]
+        public async Task<ActionResult<List<PersonDTO>>> Get([FromQuery] string Nombre)
+            => await sp.SearchNombrePerson(Nombre);
     }
 }
